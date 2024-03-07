@@ -6,11 +6,14 @@ import { auth } from "../utils/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { addUser, removeUser } from "../utils/userSlice";
 import { LOGO } from "../utils/constants";
+import { toggleGptSearchView } from "../utils/gptSlice";
 
 const Header = () => {
     const navigate = useNavigate();
     const user = useSelector((store) => store.user);
     const dispatch = useDispatch();
+
+
 
     const handleSignOut = () => {
         signOut(auth)
@@ -52,6 +55,12 @@ const Header = () => {
         return () => unsubscribe();
     }, []);
 
+    const handleGptSeach = () => {
+        //toggle GPT search
+        dispatch(toggleGptSearchView());
+    }
+
+
     return (
         <div className="absolute px-8 py-2 bg-gradient-to-b from-black z-10 w-full flex justify-between">
             <img
@@ -61,10 +70,12 @@ const Header = () => {
             />
             {user && (
                 <div className="relative w-full flex items-center justify-end">
+                    <button className="bg-red-500 p-3 rounded-md mr-2 text-white" onClick={handleGptSeach}>GPT Search</button>
                     <img
-                        className="w-12 h-12 flex mr-2"
+                        className="w-12 h-12 flex mr-2 rounded-md object-fill"
                         src={user?.photoURL}
                         alt="logo"
+
                     />
                     <button onClick={handleSignOut} className="text-white font-bold">
                         (sign out)
